@@ -1,0 +1,70 @@
+======SCHEMA=====
+
+Roles
+----------------
+Id (PK)
+Name
+
+Users
+----------------
+Id (PK)
+Email
+PasswordHash
+RoleId (FK)
+
+Profiles
+----------------
+Id (PK)
+UserId (FK)
+FullName
+Address
+MobileNumber
+
+Categories
+----------------
+Id (PK)
+Name
+ParentCategoryId? (FK)
+
+Products
+----------------
+Id (PK)
+CategoryId (FK)
+Name
+Price
+Description
+
+ProductImages
+----------------
+Id (PK)
+ProductId (FK)
+ImageFilePath
+
+OrderStatus
+----------------
+Id (PK)
+Name (InCart, Placed, Dispatched, InTrasit, Delivered, Canceled, Rejected)
+
+Orders
+----------------
+Id (PK)
+DateTime
+TotalAmount
+OrderStatusId (FK)
+UserId (FK)
+
+OrderStatusChanges
+--------------------
+Id (PK)
+OrderId (FK)
+OrderStatusId (FK)
+ChangedAt
+ChangeReason?
+
+OrderedProducts
+--------------------------------
+Id (PK)
+ProductId (FK)
+OrderId (FK)
+Quantity 
+AmountPerUnit
