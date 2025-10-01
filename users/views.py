@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth.hashers import make_password, check_password
 
 from .models import User, Role
+from utils.validators import email_validator, password_validator
 
 def show_login_page(request: HttpRequest):
     if request.method == "GET":
@@ -40,8 +41,16 @@ def signup(request: HttpRequest):
     if email is None or password is None:
        return HttpResponse("Email and password are compulsory")
 
-    existing_user = User.objects.get(email=email)
-    if existing_user is not None:
+    is_email_valid = email_validator.validate(email)
+    if not is_email_valid:
+        return HttpResponse("Invalid email")
+    
+    is_password_valid = password_validator.validate(password)
+    if not is_password_valid:
+        return HttpResponse("Password must contain at least 8 characters, 1 capital, 1 small, 1 number, and 1 special char")
+
+    existing_user = User.objects.filter(email=email)
+    if existing_user.count() > 0:
         return HttpResponse("Sorry, this email is not available")
 
     customer_role = Role.objects.get(name="Customer")
@@ -50,7 +59,7 @@ def signup(request: HttpRequest):
     user.email = email
     user.password_hash = make_password(password)
     user.role = customer_role
-    
     user.save()
+
     return HttpResponse("Signed up successfully")
     
