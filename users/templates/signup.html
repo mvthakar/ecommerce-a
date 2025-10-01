@@ -27,5 +27,24 @@
       </div>
     </div>
   </form>
+  {% if success is not None %}
+  <div class="row mt-4">
+    <div class="col col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-10 offset-1">
+      <div class="alert alert-success mb-0 alert-dismissible fade show shadow" role="alert">
+        {{ success }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+  {% elif error is not None %}
+  <div class="row mt-4">
+    <div class="col col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-10 offset-1">
+      <div class="alert alert-danger mb-0 alert-dismissible fade show shadow" role="alert">
+        {{ error }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+  {% endif %}
 </div>
 {% include 'footer.html' %}

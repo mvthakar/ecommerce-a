@@ -1,5 +1,5 @@
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.http import HttpRequest
+from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password, check_password
 
 from .models import User, Role
@@ -16,17 +16,23 @@ def login(request: HttpRequest):
     password = request.POST.get('password')
     
     if email is None or password is None:
-       return HttpResponse("Email and password are compulsory")
+       return render(request, 'login.html', {
+           "error": "Email and password are compulsory"
+       })
    
     user = User.objects.filter(email=email).first()
     if user is None:
-        return HttpResponse("Wrong email or password")
+        return render(request, 'login.html', {
+           "error": "Wrong email or password"
+       })
     
     is_password_valid = check_password(password, user.password_hash)
     if not is_password_valid:
-        return HttpResponse("Wrong email or password")
+        return render(request, 'login.html', {
+           "error": "Wrong email or password"
+       })
  
-    return HttpResponse("Logged in successfully")    
+    return redirect('/users/roles')
 
 def show_signup_page(request: HttpRequest):
     if request.method == "GET":
@@ -39,19 +45,27 @@ def signup(request: HttpRequest):
     password = request.POST.get('password')
     
     if email is None or password is None:
-       return HttpResponse("Email and password are compulsory")
+        return render(request, 'signup.html', {
+            "error": "Email and password are compulsory"
+        })
 
     is_email_valid = email_validator.validate(email)
     if not is_email_valid:
-        return HttpResponse("Invalid email")
-    
+        return render(request, 'signup.html', {
+            "error": "Invalid email"
+        })
+
     is_password_valid = password_validator.validate(password)
     if not is_password_valid:
-        return HttpResponse("Password must contain at least 8 characters, 1 capital, 1 small, 1 number, and 1 special char")
+        return render(request, 'signup.html', {
+            "error": "Password must contain at least 8 characters, 1 capital, 1 small, 1 number, and 1 special char"
+        })
 
     existing_user = User.objects.filter(email=email)
     if existing_user.count() > 0:
-        return HttpResponse("Sorry, this email is not available")
+        return render(request, 'signup.html', {
+            "error": "Sorry, this email is not available"
+        })
 
     customer_role = Role.objects.get(name="Customer")
    
@@ -61,5 +75,13 @@ def signup(request: HttpRequest):
     user.role = customer_role
     user.save()
 
-    return HttpResponse("Signed up successfully")
+    return render(request, 'signup.html', {
+        "success": "Signed up successfully"
+    })
     
+def show_roles_page(request: HttpRequest):
+    all_roles = Role.objects.all()
+    return render(request, 'roles.html', {
+        'roles': all_roles,
+        'extra': 'This is a dummy message'
+    })

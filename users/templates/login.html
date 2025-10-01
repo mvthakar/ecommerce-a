@@ -14,7 +14,8 @@
           </div>
           <div class="mb-4">
             <label for="password" class="form-label">Password</label>
-            <input required name="password" type="password" class="form-control" id="password" placeholder="Strong password" />
+            <input required name="password" type="password" class="form-control" id="password"
+              placeholder="Strong password" />
           </div>
           <div class="mb-4 d-grid">
             <button type="submit" class="btn btn-success">Submit</button>
@@ -23,5 +24,15 @@
       </div>
     </div>
   </form>
+  {% if error is not None %}
+  <div class="row mt-4">
+    <div class="col col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-10 offset-1">
+      <div class="alert alert-danger mb-0 alert-dismissible fade show shadow" role="alert">
+        {{ error }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+  {% endif %}
 </div>
 {% include 'footer.html' %}
