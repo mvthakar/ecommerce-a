@@ -78,10 +78,3 @@ def signup(request: HttpRequest):
     return render(request, 'signup.html', {
         "success": "Signed up successfully"
     })
-    
-def show_roles_page(request: HttpRequest):
-    all_roles = Role.objects.all()
-    return render(request, 'roles.html', {
-        'roles': all_roles,
-        'extra': 'This is a dummy message'
-    })
