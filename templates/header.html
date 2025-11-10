@@ -18,15 +18,21 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      {% if request.COOKIES.email %}
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="#">Home</a>
+        <a class="nav-link active" aria-current="page" href="/users/home">Home</a>
       </div>
+      <div class="navbar-nav">
+        <a class="nav-link active" aria-current="page" href="/users/logout">Log out</a>
+      </div>
+      {% else %}
       <div class="navbar-nav">
         <a class="nav-link" aria-current="page" href="/users/login">Login</a>
       </div>
       <div class="navbar-nav">
         <a class="nav-link" aria-current="page" href="/users/signup">Sign up</a>
       </div>
+      {% endif %}
     </div>
   </div>
 </nav>

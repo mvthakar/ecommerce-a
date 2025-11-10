@@ -1,4 +1,4 @@
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password, check_password
 
@@ -7,6 +7,9 @@ from utils.validators import email_validator, password_validator
 
 def show_login_page(request: HttpRequest):
     if request.method == "GET":
+        if request.COOKIES.get('email') is not None:
+            return redirect('/users/home')
+        
         return render(request, 'login.html')
         
     return login(request)
@@ -32,12 +35,20 @@ def login(request: HttpRequest):
            "error": "Wrong email or password"
        })
  
-    return redirect('/users/roles')
+    response = redirect("/users/home")
+    response.set_cookie(
+        key='email',
+        value=email
+    )
+    
+    return response
 
 def show_signup_page(request: HttpRequest):
     if request.method == "GET":
+        if request.COOKIES.get('email') is not None:
+            return redirect('/users/home')
+        
         return render(request, 'signup.html')
-    
     return signup(request)
 
 def signup(request: HttpRequest):
@@ -78,3 +89,15 @@ def signup(request: HttpRequest):
     return render(request, 'signup.html', {
         "success": "Signed up successfully"
     })
+    
+def logout(request: HttpRequest):
+    response = redirect('/users/login')
+    response.delete_cookie('email')
+    
+    return response
+
+def show_home_page(request: HttpRequest):
+    if request.COOKIES.get('email') is None:
+        return redirect('/users/login')
+    
+    return render(request, 'home.html')
