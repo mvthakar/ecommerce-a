@@ -7,8 +7,8 @@ from utils.validators import email_validator, password_validator
 
 def show_login_page(request: HttpRequest):
     if request.method == "GET":
-        if request.COOKIES.get('email') is not None:
-            return redirect('/users/home')
+        if request.session.get('email') is not None:
+            return redirect('home')
         
         return render(request, 'login.html')
         
@@ -35,18 +35,15 @@ def login(request: HttpRequest):
            "error": "Wrong email or password"
        })
  
-    response = redirect("/users/home")
-    response.set_cookie(
-        key='email',
-        value=email
-    )
+    request.session['email'] = email
     
+    response = redirect("home")
     return response
 
 def show_signup_page(request: HttpRequest):
     if request.method == "GET":
-        if request.COOKIES.get('email') is not None:
-            return redirect('/users/home')
+        if request.session.get('email') is not None:
+            return redirect('home')
         
         return render(request, 'signup.html')
     return signup(request)
@@ -91,13 +88,7 @@ def signup(request: HttpRequest):
     })
     
 def logout(request: HttpRequest):
-    response = redirect('/users/login')
+    response = redirect('login')
     response.delete_cookie('email')
     
     return response
-
-def show_home_page(request: HttpRequest):
-    if request.COOKIES.get('email') is None:
-        return redirect('/users/login')
-    
-    return render(request, 'home.html')

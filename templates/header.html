@@ -18,19 +18,22 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      {% if request.COOKIES.email %}
+      {% if request.session.email %}
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="/users/home">Home</a>
+        <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
       </div>
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="/users/logout">Log out</a>
+        <a class="nav-link active" aria-current="page" href="{% url 'list-categories' %}">Categories</a>
+      </div>
+      <div class="navbar-nav">
+        <a class="nav-link active" aria-current="page" href="{% url 'logout' %}">Log out</a>
       </div>
       {% else %}
       <div class="navbar-nav">
-        <a class="nav-link" aria-current="page" href="/users/login">Login</a>
+        <a class="nav-link" aria-current="page" href="{% url 'login' %}">Login</a>
       </div>
       <div class="navbar-nav">
-        <a class="nav-link" aria-current="page" href="/users/signup">Sign up</a>
+        <a class="nav-link" aria-current="page" href="{% url 'signup' %}">Sign up</a>
       </div>
       {% endif %}
     </div>
