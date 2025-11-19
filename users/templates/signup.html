@@ -1,0 +1,50 @@
+{% include 'header.html' %}
+<div class="container">
+  <form method="post" action="/users/signup/" class="row mt-5">
+    {% csrf_token %}
+    <div class="col col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-10 offset-1">
+      <div class="card shadow">
+        <div class="card-body p-4">
+          <div class="mb-5 mt-3">
+            <h3 class="text-center">Sign up</h3>
+          </div>
+          <div class="mb-4">
+            <label for="email" class="form-label">Email address</label>
+            <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com" />
+          </div>
+          <div class="mb-4">
+            <label for="password" class="form-label">Password</label>
+            <input name="password" type="password" class="form-control" id="password" placeholder="Strong password" />
+          </div>
+          <div class="mb-4">
+            <label for="confirm-password" class="form-label">Confirm Password</label>
+            <input name="confirm-password" type="password" class="form-control" id="confirm-password" placeholder="Strong password" />
+          </div>
+          <div class="mb-4 d-grid">
+            <button type="submit" class="btn btn-success">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  {% if success is not None %}
+  <div class="row mt-4">
+    <div class="col col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-10 offset-1">
+      <div class="alert alert-success mb-0 alert-dismissible fade show shadow" role="alert">
+        {{ success }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+  {% elif error is not None %}
+  <div class="row mt-4">
+    <div class="col col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-10 offset-1">
+      <div class="alert alert-danger mb-0 alert-dismissible fade show shadow" role="alert">
+        {{ error }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% include 'footer.html' %}

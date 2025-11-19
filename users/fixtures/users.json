@@ -1,0 +1,20 @@
+[
+    {
+        "model": "users.user",
+        "pk": 1,
+        "fields": {
+          "email": "admin@gmail.com",
+          "password_hash": "pbkdf2_sha256$1000000$smbAHr3LhCKBIGvJ95bKTX$l8wAXltPjyex6t6dBmO+Y7L1VFBkEb1WgaYKj8+xY2Q=",
+          "role_id": 1
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 2,
+        "fields": {
+          "email": "customer1@gmail.com",
+          "password_hash": "pbkdf2_sha256$1000000$DH90CluRN5hnTmeOXOpjeH$W2tab99UgSEOJdF+yQU0QDAzOuS7AfB2YaKxoZroTE0=",
+          "role_id": 2
+        }
+    }
+]
