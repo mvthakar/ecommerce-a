@@ -1,4 +1,4 @@
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password, check_password
 
@@ -88,7 +88,5 @@ def signup(request: HttpRequest):
     })
     
 def logout(request: HttpRequest):
-    response = redirect('login')
-    response.delete_cookie('email')
-    
-    return response
+    request.session.clear()
+    return redirect('login')
