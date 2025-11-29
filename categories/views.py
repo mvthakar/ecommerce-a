@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest
 from .models import Category
 
 
@@ -16,6 +16,17 @@ def show_category_list_page(request: HttpRequest):
     template_data['error'] = request.GET.get('error')
   
   return render(request, 'list_categories.html', template_data)
+
+
+def show_add_category_page(request: HttpRequest):
+  if request.session.get('email') is None:
+    return redirect('login')
+  
+  categories = Category.objects.all().values('id', 'name')
+  
+  return render(request, 'add_category.html', {
+    "categories": categories
+  })
 
 
 def add_category(request: HttpRequest):
@@ -42,18 +53,7 @@ def add_category(request: HttpRequest):
     parent_category = parent_category
   )
 
-  return redirect('add-category')
-
-
-def show_add_category_page(request: HttpRequest):
-  if request.session.get('email') is None:
-    return redirect('login')
-  
-  categories = Category.objects.all().values('id', 'name')
-  
-  return render(request, 'add_category.html', {
-    "categories": categories
-  })
+  return redirect('list-categories')
   
   
 def show_edit_category_page(request: HttpRequest, error: str = None):
@@ -101,7 +101,7 @@ def edit_category(request: HttpRequest):
     category.parent_category = None
     category.save()
 
-    return HttpResponse(f"NO ID: {id} - {name} - {parent_category_id}")  
+    return redirect('list-categories')  
   
   if parent_category is None:
     return show_edit_category_page(request, error="Invalid parent category")
@@ -110,7 +110,7 @@ def edit_category(request: HttpRequest):
   category.parent_category = parent_category
   category.save()  
 
-  return HttpResponse(f"With: {id} - {name} - {parent_category_id}")
+  return redirect('list-categories')  
 
 
 def delete_category(request: HttpRequest):
@@ -121,9 +121,13 @@ def delete_category(request: HttpRequest):
   if category_id is None:
     return redirect("/categories/?error=Category doesnt exist")
   
-  category_to_delete = Category.objects.filter(id=category_id)  
-  if len(category_to_delete) == 0:
+  category_to_delete = Category.objects.filter(id=category_id).first()  
+  if category_to_delete is None:
     return redirect("/categories/?error=Category doesnt exist")
+
+  children_categories = Category.objects.filter(parent_category=category_to_delete)
+  if len(children_categories) > 0:
+    return redirect("/categories/?error=Cannot delete this category since has children")
   
   category_to_delete.delete()
   return redirect('list-categories')
