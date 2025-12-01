@@ -1,0 +1,30 @@
+{% include 'header.html' %}
+<div class="container">
+  <form method="post" action="{% url 'add-product-exp' %}" class="row mt-5">
+    {% csrf_token %}
+    <div class="col col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-10 offset-1">
+      <div class="card shadow">
+        <div class="card-body p-4">
+          <div class="mb-5 mt-3">
+            <h3 class="text-center">Add a New Product</h3>
+          </div>
+          {{ form.as_p }}
+          <div class="mb-4 d-grid">
+            <button type="submit" class="btn btn-success">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  {% if error is not None %}
+  <div class="row mt-4">
+    <div class="col col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-10 offset-1">
+      <div class="alert alert-danger mb-0 alert-dismissible fade show shadow" role="alert">
+        {{ error }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% include 'footer.html' %}
